@@ -6,6 +6,7 @@ use reqwest::Client;
 pub mod oauth;
 
 /// The Koala API.
+#[derive(Debug, Clone)]
 pub struct KoalaApi {
     client: Client,
     host: String,

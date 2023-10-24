@@ -9,11 +9,26 @@ const USERINFO_ENDPOINT: &str = "/oauth/userinfo";
 const LOGIN_ENDPOINT: &str = "/api/oauth/authorize";
 const LOGIN_SCOPES: &str = "member-read+openid+email+profile";
 
+/// Koala OAuth2 API.
+/// Can be acquired via [KoalaApi::oauth_api].
+///
+/// This API allows the user to authorize with Koala.
+/// Generally, the OAuth2 Login flow is as follows:
+/// 1. The user sends a request to your server (we'll call this the `App`).
+/// 2. The user gets redirected to the URL returned by [KoalaOAuth::get_login_redirect_uri].
+/// 3. The user logs in in Koala.
+/// 4. Koala redirects the user back to the App. The query will contain the `code` parameter if everything went OK.
+/// 5. The App exchanges the `code` for an access- and refresh token using [KoalaOAuth::exchange_login_code].
+/// 6. The App can now make requests to Koala APIs or other APIs using Koala for authorization using the acquired access token.
+/// 7. In case the access token has expired, it can be renewed using the refresh token and [KoalaOAuth::refresh_access_token].
+#[derive(Clone, Debug)]
 pub struct KoalaOAuth<'a> {
     koala: &'a KoalaApi,
     config: ClientConfig,
 }
 
+/// OAuth2 client configuration.
+#[derive(Clone, Debug, PartialEq)]
 pub struct ClientConfig {
     id: String,
     secret: String,
@@ -21,6 +36,7 @@ pub struct ClientConfig {
 }
 
 impl ClientConfig {
+    /// Create a new OAuth2 client configuration.
     pub fn new(id: String, secret: String, redirect_uri: String) -> Self {
         Self {
             id,
@@ -30,7 +46,8 @@ impl ClientConfig {
     }
 }
 
-/// OAuth2 token information
+/// OAuth2 token information.
+#[derive(Debug, Clone)]
 pub struct OAuthTokens {
     /// OAuth2 access token.
     pub access_token: String,
@@ -43,10 +60,11 @@ pub struct OAuthTokens {
 }
 
 /// Information about the user
+#[derive(Debug, Clone)]
 pub struct UserInfo {
-    /// Koala user ID
+    /// Koala user ID.
     pub koala_id: i32,
-    /// Whether the user is an administrator
+    /// Whether the user is an administrator in Koala.
     pub is_admin: bool,
 }
 
