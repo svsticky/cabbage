@@ -2,7 +2,7 @@
 name = "cabbage"
 version = "0.1.0"
 edition = "2021"
-license = "MIT OR Apache2.0"
+license = "MIT OR Apache-2.0"
 description = "Rust wrapper around SV Sticky's Koala API"
 homepage = "https://svsticky.nl"
 repository = "https://github.com/svsticky/cabbage"
