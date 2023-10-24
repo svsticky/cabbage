@@ -2,11 +2,13 @@
 name = "cabbage"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+license = "MIT OR Apache2.0"
+description = "Rust wrapper around SV Sticky's Koala API"
+homepage = "https://svsticky.nl"
+repository = "https://github.com/svsticky/cabbage"
+readme = "README.md"
 
 [dependencies]
 reqwest = { version = "0.11.22", default-features = false, features = ["rustls-tls", "json"] }
 serde = { version = "1.0.189", features = ["derive"] }
-thiserror = "1.0.50"
 time = "0.3.30"
