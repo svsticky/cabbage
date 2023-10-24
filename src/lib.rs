@@ -1,5 +1,5 @@
-use reqwest::Client;
 use crate::oauth::{ClientConfig, KoalaOAuth};
+use reqwest::Client;
 
 pub mod oauth;
 
@@ -29,9 +29,7 @@ impl KoalaApi {
     /// If creating a [reqwest::Client] fails.
     pub fn new_with_user_agent(host: String, user_agent: &str) -> reqwest::Result<Self> {
         Ok(Self {
-            client: Client::builder()
-                .user_agent(user_agent)
-                .build()?,
+            client: Client::builder().user_agent(user_agent).build()?,
             host,
         })
     }

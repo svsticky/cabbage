@@ -1,5 +1,5 @@
-use reqwest::header::ACCEPT;
 use crate::KoalaApi;
+use reqwest::header::ACCEPT;
 use reqwest::Result;
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
@@ -52,19 +52,14 @@ pub struct UserInfo {
 
 impl<'a> KoalaOAuth<'a> {
     pub(crate) fn new(koala: &'a KoalaApi, config: ClientConfig) -> Self {
-        Self {
-            koala,
-            config,
-        }
+        Self { koala, config }
     }
 
     /// Get the URL where the user should be redirected to to login with Koala.
     pub fn get_login_redirect_uri(&self) -> String {
         let query = format!(
             "?client_id={}&redirect_uri={}&response_type=code&scope={}",
-            self.config.id,
-            self.config.redirect_uri,
-            LOGIN_SCOPES
+            self.config.id, self.config.redirect_uri, LOGIN_SCOPES
         );
 
         self.koala.get_url(&format!("{LOGIN_ENDPOINT}{query}"))
@@ -77,9 +72,14 @@ impl<'a> KoalaOAuth<'a> {
     /// - If the request fails.
     /// - If the code is invalid.
     pub async fn exchange_login_code<S: AsRef<str>>(&self, code: S) -> Result<OAuthTokens> {
-        let response: ExchangeResponse = self.koala.client
+        let response: ExchangeResponse = self
+            .koala
+            .client
             .post(self.koala.get_url(TOKEN_ENDPOINT))
-            .json(&ExchangeRequest::new_exchange_code(code.as_ref(), &self.config))
+            .json(&ExchangeRequest::new_exchange_code(
+                code.as_ref(),
+                &self.config,
+            ))
             .send()
             .await?
             .error_for_status()?
@@ -94,10 +94,18 @@ impl<'a> KoalaOAuth<'a> {
     ///
     /// - If the request fails.
     /// - If the refresh token is invalid.
-    pub async fn refresh_access_token<S: AsRef<str>>(&self, refresh_token: S) -> Result<OAuthTokens> {
-        let response: ExchangeResponse = self.koala.client
+    pub async fn refresh_access_token<S: AsRef<str>>(
+        &self,
+        refresh_token: S,
+    ) -> Result<OAuthTokens> {
+        let response: ExchangeResponse = self
+            .koala
+            .client
             .post(self.koala.get_url(TOKEN_ENDPOINT))
-            .json(&ExchangeRequest::new_refresh_token(refresh_token.as_ref(), &self.config))
+            .json(&ExchangeRequest::new_refresh_token(
+                refresh_token.as_ref(),
+                &self.config,
+            ))
             .send()
             .await?
             .error_for_status()?
@@ -113,7 +121,9 @@ impl<'a> KoalaOAuth<'a> {
     /// - If the request fails.
     /// - If the access token is invalid.
     pub async fn get_userinfo<S: AsRef<str>>(&self, access_token: S) -> Result<UserInfo> {
-        let response: UserInfoResponse = self.koala.client
+        let response: UserInfoResponse = self
+            .koala
+            .client
             .get(self.koala.get_url(USERINFO_ENDPOINT))
             .header(ACCEPT, "application/json")
             .bearer_auth(access_token.as_ref())
