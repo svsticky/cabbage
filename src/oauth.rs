@@ -4,7 +4,7 @@ use reqwest::Result;
 use serde::{Deserialize, Serialize};
 use time::OffsetDateTime;
 
-const TOKEN_ENDPOINT: &str = "/api/oauth/toke";
+const TOKEN_ENDPOINT: &str = "/api/oauth/token";
 const USERINFO_ENDPOINT: &str = "/oauth/userinfo";
 const LOGIN_ENDPOINT: &str = "/api/oauth/authorize";
 const LOGIN_SCOPES: &str = "member-read+openid+email+profile";
