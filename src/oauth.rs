@@ -66,6 +66,8 @@ pub struct UserInfo {
     pub koala_id: i32,
     /// Whether the user is an administrator in Koala.
     pub is_admin: bool,
+    /// The full name of the user
+    pub full_name: String,
 }
 
 impl<'a> KoalaOAuth<'a> {
@@ -221,6 +223,7 @@ impl From<ExchangeResponse> for OAuthTokens {
 struct UserInfoResponse {
     sub: String,
     is_admin: bool,
+    full_name: String,
 }
 
 impl From<UserInfoResponse> for UserInfo {
@@ -229,6 +232,7 @@ impl From<UserInfoResponse> for UserInfo {
             // Unwrap is safe: Koala guarantees this
             koala_id: value.sub.parse::<i32>().unwrap(),
             is_admin: value.is_admin,
+            full_name: value.full_name,
         }
     }
 }
